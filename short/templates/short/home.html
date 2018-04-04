@@ -1,0 +1,14 @@
+<ul>
+    {% for message in messages %}
+    <li{% if message.tags%} {% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+
+<form action="{% url 'home' %}" method="post">
+  {% csrf_token %}
+  <label for="link_to_short">Original Url</label>
+  <input type="text" name="link_to_short" value="{{original}}" placeholder="Url" required>
+  <label for="shortened_link">Shortened Url</label>
+  <input type="text" name="shortened_link" value="{{shortened}}" placeholder="Url">
+  <input type="submit" value="Enter">
+</form>
