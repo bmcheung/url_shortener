@@ -60,6 +60,7 @@ class Home(View):
                     'shortened' : request.build_absolute_uri()+new
                 }
             elif data['shortened']:
+                #strip key from shortened url
                 key = data['shortened'].replace(request.build_absolute_uri(),'')
                 old = foo.Decode(key)
                 try:
