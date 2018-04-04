@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django.views import View
 from django.db.models import F
 from django.contrib import messages
+from .forms import UrlForm
 from .models import Urls
 
 
@@ -44,15 +45,32 @@ class Home(View):
         return render(request, 'short/home.html')
 
     def post(self, request):
-        data = request.POST.get('link_to_short')
-        try:
-            url = Urls.objects.create(url=data)
-        except:
-            url = Urls.objects.get(url=data)
-        foo = Shortener()
-        new = foo.Encode(url.id)
-        context = {
-            'original' : url.url,
-            'shortened' : request.build_absolute_uri()+new
-        }
+        form = UrlForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            foo = Shortener()
+            if data['original']:
+                try:
+                    url = Urls.objects.create(url=data['original'])
+                except:
+                    url = Urls.objects.get(url=data['original'])
+                new = foo.Encode(url.pk)
+                context = {
+                    'original' : url.url,
+                    'shortened' : request.build_absolute_uri()+new
+                }
+            elif data['shortened']:
+                key = data['shortened'].replace(request.build_absolute_uri(),'')
+                old = foo.Decode(key)
+                try:
+                    url = Urls.objects.get(pk=old)
+                except:
+                    messages.add_message(request, messages.ERROR, 'This link is broken or has expired.')
+                    return redirect(reverse('home'))
+                context = {
+                    'original' : url.url,
+                    'shortened' : data['shortened']
+                }
+        else:
+            return redirect(reverse('home'))
         return render(request, 'short/home.html',context)
