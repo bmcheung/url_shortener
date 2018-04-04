@@ -28,8 +28,8 @@ class Shortener:
             number = number * self._base + self._alphabet.index(char)
         return number
 
-# store Url in database and encode UrlID
 def urlRedirect(request, string):
+    # redirect from a shortened url
     foo = Shortener()
     try:
         RedirectLink = Urls.objects.get(pk=foo.Decode(string))
