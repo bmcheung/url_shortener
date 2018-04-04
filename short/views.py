@@ -73,5 +73,6 @@ class Home(View):
                     'shortened' : data['shortened']
                 }
         else:
+            messages.add_message(request, messages.ERROR, "Enter either the original or shortened url.")
             return redirect(reverse('home'))
         return render(request, 'short/home.html',context)

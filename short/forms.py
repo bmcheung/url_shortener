@@ -10,13 +10,11 @@ class UrlForm(forms.Form):
         original = cleaned_data.get("original")
         shortened = cleaned_data.get("shortened")
 
-        # if original and shortened:
-        #     raise forms.ValidationError(
-        #         "Enter either the original or shortened url."
-        #     )
-        # elif not original and not shortened:
-        #     raise forms.ValidationError(
-        #         "Enter either the original or shortened url."
-        #     )
-        # else:
-        #
+        if original and shortened:
+            raise forms.ValidationError(
+                "aaaaaaah"
+            )
+        elif not original and not shortened:
+            raise forms.ValidationError(
+                "aaaaaaaah"
+            )
